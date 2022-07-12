@@ -157,6 +157,7 @@ def UnpackDataFromBmp24File(name):
             f.seek(0x0E) # Seek to the start of the bitmap information header.
             f.read(4) # Ignore the size of the header
             width, height, plane, bpp = struct.unpack('<iihh', f.read(12))
+            global raw
             raw = list()
             if width == MAX_WIDTH:
                 if height == MAX_HEIGHT:
@@ -175,19 +176,19 @@ def UnpackDataFromBmp24File(name):
                     raise Exception("Image hight detected: " + str(height) + ". Image height must equal " + str(MAX_HEIGHT) + ".")
             else:
                 raise Exception("Image width detected: " + str(width) + ". Image width must equal " + str(MAX_WIDTH) + ".")
-    i = 0
-    data = list() # Rows.
-    for y in range(0, MAX_HEIGHT, 1):
-        data.append(list()) # Columns.
-        for x in range(0, MAX_WIDTH, 1):
-            data[y].append(list()) # Channels.
-            data[y][x].append(raw[i + 2]) # Swap from BGR to RGB formatted channels.
-            data[y][x].append(raw[i + 1])
-            data[y][x].append(raw[i + 0])
-            i = i + 3
-    data.reverse() # Bitmaps are stored up-side-down so let's flip the rows.
-
-    return data
+            i = 0
+            data = list() # Rows.
+            for y in range(0, MAX_HEIGHT, 1):
+                data.append(list()) # Columns.
+                for x in range(0, MAX_WIDTH, 1):
+                    data[y].append(list()) # Channels.
+                    data[y][x].append(raw[i + 2]) # Swap from BGR to RGB formatted channels.
+                    data[y][x].append(raw[i + 1])
+                    data[y][x].append(raw[i + 0])
+                    i = i + 3
+                data.reverse() # Bitmaps are stored up-side-down so let's flip the rows.
+            
+            #return data
 
 COLOR_BLACK  = Color656(  0,   0,   0)
 COLOR_GREY   = Color656(192, 192, 192)
@@ -458,8 +459,8 @@ class SSD1331:
         self.__WriteCommand([SET_COLUMN_ADDRESS, 0, 0x5F, SET_ROW_ADDRESS, 0, 0x3F]) # Set the address to 0, 0.
         for y in range(0, len(data), 1):
             d = list() # Build up a list of pixel data to render an entire row per data write command.
-            for x in range(0, len(data[y]), 1):
-                c = Color656(data[y][x][0], data[y][x][1], data[y][x][2])
+            for x in range(0, len(data[y]), 2):
+                c = Color656(data[y][x][0], data[y][x][1], data[y][x][1])
                 d.append((c >> 8) & 0xFF)
                 d.append(c & 0xFF)
             self.__WriteData(d)
@@ -617,17 +618,18 @@ SSD1331_PIN_RST = 25
 #if __name__ == '__main__':
 #    device = SSD1331(SSD1331_PIN_DC, SSD1331_PIN_RST, SSD1331_PIN_CS)
 #    try:
-#        #data_balloon = UnpackDataFromBmp24File("balloon.bmp")
+#        data_balloon = UnpackDataFromBmp24File("T1.bmp")
 #        device.EnableDisplay(True)
-#        device.LockTest()
-#        device.LineTest()
-#        device.RectTest()
-#        device.ScrollTest()
-#        device.ShapeTest()
-#        device.CharTest()
-#        #device.BitMapTest(data_balloon)
-#        device.EnableDisplay(False)
+        #device.LockTest()
+        #device.LineTest()
+        #device.RectTest()
+        #device.ScrollTest()
+        #device.ShapeTest()
+        #device.CharTest()
+        #device.DrawFullScreenBitMap("T1.bmp")
+        #device.BitMapTest(data_balloon)
+        #device.EnableDisplay(False)
 #    finally:
 #        device.Remove()
 
-###
+
