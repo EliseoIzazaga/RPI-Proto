@@ -112,6 +112,10 @@ if __name__ == '__main__':
         #device.DrawString(0,10, "Part5", COLOR_PURPLE)
         #device.DrawString(0,12, "Part6", COLOR_GREY)
         time.sleep(100)
+        # we are at 10 pixels per column
+        device.clear()
+        device.DrawRect(0,0,60,10,COLOR_WHITE, 0)
+        
     finally:
         device.EnableDisplay(False)
         device.Remove()
