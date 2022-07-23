@@ -83,15 +83,29 @@ SET_V_VOLTAGE              = 0xBE
 
 LOCK_MODE                  = 0xFD
 
+device = SSD1331(SSD1331_PIN_DC, SSD1331_PIN_RST, SSD1331_PIN_CS)
+
+def startUpMessage():
+    device.EnableDisplay(True)
+    device.Clear()
+    device.DrawString(0,0, "ONLINE...", COLOR_GOLDEN)
+    time.sleep(10)
+    device.Clear()
+
+def printToOled(toPrint, color, displayTime):
+    device.Clear()
+    device.DrawString(0,0, toPrint, color)
+    time.sleep(displayTime)
+    device.Clear()
+
+
 
 
 if __name__ == '__main__':
-    device = SSD1331(SSD1331_PIN_DC, SSD1331_PIN_RST, SSD1331_PIN_CS)
     try:
-        device.EnableDisplay(True)
-        device.Clear()
-        device.DrawString(0,0, "INITIAL PUSH", COLOR_GOLDEN)
-        time.sleep(100)
+        startUpMessage()
+        printToOled("Start up complete...", COLOR_PURPLE, 10)
+        
     finally:
         device.EnableDisplay(False)
         device.Remove()
