@@ -104,7 +104,7 @@ def printToOled(toPrint, color, displayTime):
 if __name__ == '__main__':
     try:
         startUpMessage()
-        printToOled("Start up complete...")
+        printToOled("Start up complete...", COLOR_PURPLE, 10)
         
     finally:
         device.EnableDisplay(False)
