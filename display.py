@@ -105,7 +105,7 @@ if __name__ == '__main__':
     startUpMessage()
     try:
         while (True):
-            printToOled("Ready...." , COLOR_PURPLE, 10)
+            printToOled("This is the ISAAC I" , COLOR_PURPLE, 10)
             
         
         
